@@ -40,5 +40,5 @@ app-example
 
 # others
 .replit
-
+replit.nix
 package-lock.json 

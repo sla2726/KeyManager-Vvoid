@@ -5,11 +5,11 @@ import { Key } from './types/keys';
 
 type KeyFormProps = {
 	keys: Key[];
-	setKeys: React.Dispatch<React.SetStateAction<Key[]>>;
+	adKey: React.Dispatch<React.SetStateAction<Key[]>>;
 	setIsAddKey: (value: boolean) => void;
 };
 
-export default function KeyAddForm({ keys, setKeys, setIsAddKey }: KeyFormProps) {
+export default function KeyAddForm({ keys, addKey, setIsAddKey }: KeyFormProps) {
 	const [newKeyName, setNewKeyName] = useState('');
 	const [newKeyPass, setNewKeyPass] = useState('');
 	const [newKeyDist, setNewKeyDist] = useState('');
@@ -34,7 +34,7 @@ export default function KeyAddForm({ keys, setKeys, setIsAddKey }: KeyFormProps)
 			date: new Date().toISOString(),
 			id: id,
 		};
-		setKeys((prev) => [...prev, validatedKey]);
+		addKey(validatedKey);
 		setIsAddKey(false);
 		setNewKeyName('');
 		setNewKeyPass('');

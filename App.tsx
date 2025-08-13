@@ -1,13 +1,15 @@
 import './global.css';
 import * as Updates from 'expo-updates';
 import { useFonts } from 'expo-font';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { AlignJustify, Plus, RefreshCw } from 'lucide-react-native';
+import * as Animatable from 'react-native-animatable';
 import { Key } from './components/types/keys';
 import KeyAddForm from './components/KeyAddForm';
 import KeyEditForm from './components/KeyEditForm';
 import KeyView from './components/KeyView';
+import { createDB, keySave, keyLoad } from './database'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,12 +17,9 @@ export default function App() {
   });
 
   // Senhas - Auxiliares
-  const id = Date.now().toString() + Math.random().toString(36).substring(2, 9);
-
+  
   // Senhas
-  const [keys, setKeys] = useState<Key[]>([
-    { name: 'Hello world', key: '123cool', dist: 'youtube', date: '2025', id: id },
-  ]);
+  const [keys, setKeys] = useState<Key[]>([]);
 
   const [isAddKey, setIsAddKey] = useState<boolean>(false);
   const [isEditKey, setIsEditKey] = useState<boolean>(false);
@@ -29,6 +28,30 @@ export default function App() {
 
   const [isInfoKey, setIsInfoKey] = useState<boolean>(false);
   const [infoKey, setInfoKey] = useState<Key | null>(null);
+
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  // Animação de saída do Menu
+  const animationRef = useRef(null);
+
+  const closeMenu = () => {
+    animationRef.current?.slideOutLeft(400).then(() => setIsMenuOpen(false));
+  };
+
+  // Banco de Dados
+  useEffect(() => {
+    createDB();
+    keyLoad(setKeys);
+  }, []);
+
+  function addKey(newKeyData: Key) {
+    const newKey: Key = {
+      ...newKeyData,
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
+    };
+    setKeys(prev => [...prev, newKey]);
+    keySave(newKey);
+  }
 
   const reloadApp = async () => {
     try {
@@ -41,12 +64,12 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <View className="relative h-full w-full bg-slate-900">
-      <SafeAreaView className="relative flex h-16 w-full items-center justify-center bg-slate-800">
+    <View className="h-full w-full flex-1 bg-slate-900">
+      <SafeAreaView className="absolute relative top-0 flex h-16 w-full items-center justify-center bg-slate-800">
         <View className="absolute left-2">
-          <Text className="font-bold">
+          <TouchableOpacity onPress={() => setIsMenuOpen(true)} className="font-bold">
             <AlignJustify color="white" />
-          </Text>
+          </TouchableOpacity>
         </View>
 
         <Text className="font-bold text-white">Key Manager</Text>
@@ -63,7 +86,7 @@ export default function App() {
         }}
       />
 
-      <View className="relative z-20 flex h-10 w-full flex-row items-center justify-center bg-slate-800 ">
+      <View className="absolute bottom-0 z-10 flex h-10 w-full flex-row items-center justify-center bg-slate-800 ">
         <View className="absolute rounded-full bg-gray-600 px-2">
           <TouchableOpacity onPress={() => setIsAddKey((prev) => !prev)}>
             <Plus />
@@ -80,7 +103,7 @@ export default function App() {
         <KeyAddForm
           {...{
             keys,
-            setKeys,
+            addKey,
             setIsAddKey,
             setIsEditKey,
           }}
@@ -99,13 +122,29 @@ export default function App() {
         />
       )}
 
+      {isMenuOpen && (
+        <TouchableWithoutFeedback onPress={() => closeMenu()}>
+          <View className="absolute inset-0 z-10 bg-black/50">
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <Animatable.View
+                ref={animationRef}
+                animation="slideInLeft"
+                duration={400}
+                className="z-20 h-full w-2/4 bg-black">
+                <View>
+                  <Text className="text-slate-100">jksksksk</Text>
+                </View>
+              </Animatable.View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      )}
+
       {isInfoKey && infoKey && (
-        <TouchableWithoutFeedback
-          onPress={() => setIsInfoKey(false)}
-          className="absolute inset-0 z-10 flex w-full items-center justify-center">
+        <TouchableWithoutFeedback onPress={() => setIsInfoKey(false)}>
           <View className="absolute inset-0 z-10 flex w-full items-center justify-center bg-black/50">
             <TouchableWithoutFeedback onPress={() => {}}>
-              <View className="flex w-3/4 flex-col rounded-md border border-gray-500/60 bg-slate-900 px-4 py-2">
+              <View className="flex w-3/4 flex-col rounded-md border border-gray-500/60 bg-slate-900 px-4 py-6">
                 {Object.entries({
                   Nome: infoKey.name,
                   Senha: infoKey.key,
