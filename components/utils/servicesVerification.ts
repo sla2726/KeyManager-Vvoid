@@ -1,6 +1,10 @@
 import { services } from '../data/services';
 
-export function servicesVerification(input: string) {
+export function servicesVerification(input: string | null) {
+	if (!input) {
+		return { name: 'Outro', icon: 'Globe', color: '#9E9E9E' };
+	}
+	
 	const lowerInput = input.toLowerCase();
 
 	for (const service of services) {

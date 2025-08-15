@@ -9,15 +9,13 @@ import { Key } from './components/types/keys';
 import KeyAddForm from './components/KeyAddForm';
 import KeyEditForm from './components/KeyEditForm';
 import KeyView from './components/KeyView';
-import { createDB, keySave, keyLoad } from './database'
+import { saveData, loadData } from './components/utils/saveStorage';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
     Oswald: require('./assets/fonts/Oswald.ttf'),
   });
 
-  // Senhas - Auxiliares
-  
   // Senhas
   const [keys, setKeys] = useState<Key[]>([]);
 
@@ -38,19 +36,25 @@ export default function App() {
     animationRef.current?.slideOutLeft(400).then(() => setIsMenuOpen(false));
   };
 
-  // Banco de Dados
+  // Recarregando e Salvando
   useEffect(() => {
-    createDB();
-    keyLoad(setKeys);
+    async function fetchKeys() {
+      const storedKeys = await loadData();
+      setKeys(storedKeys);
+    }
+    fetchKeys();
   }, []);
+
+  useEffect(() => {
+    saveData(keys);
+  }, [keys]);
 
   function addKey(newKeyData: Key) {
     const newKey: Key = {
       ...newKeyData,
       id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
     };
-    setKeys(prev => [...prev, newKey]);
-    keySave(newKey);
+    setKeys((prev) => [...prev, newKey]);
   }
 
   const reloadApp = async () => {
@@ -103,7 +107,7 @@ export default function App() {
         <KeyAddForm
           {...{
             keys,
-            addKey,
+            setKeys,
             setIsAddKey,
             setIsEditKey,
           }}

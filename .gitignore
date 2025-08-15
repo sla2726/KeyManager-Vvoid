@@ -42,3 +42,5 @@ app-example
 .replit
 replit.nix
 package-lock.json 
+cesconfig.jsonc
+prettier.config.js

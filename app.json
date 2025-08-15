@@ -11,10 +11,9 @@
     },
     "plugins": [
       "expo-font",
-      "expo-sqlite"
     ],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon.svg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -29,8 +28,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.svg",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.keymanager"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "38176034-81c4-4b83-aaa0-aedd404ca5a1"
       }
     }
   }

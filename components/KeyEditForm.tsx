@@ -19,7 +19,7 @@ export default function KeyEditForm({ keys, setKeys, setIsEditKey, setKeyToEdit,
 	const [showPassword, setShowPassword] = useState(true);
 
 	const [isPassDuplicate, setIsPassDuplicate] = useState(false);
-	
+
 	const formIsValid =
 		newKeyName.trim() !== '' &&
 		newKeyPass.trim() !== '' &&
@@ -50,7 +50,7 @@ export default function KeyEditForm({ keys, setKeys, setIsEditKey, setKeyToEdit,
 			setNewKeyDist(keyToEdit.dist);
 		}
 	}, [keyToEdit])
-	
+
 	return (
 		<TouchableWithoutFeedback onPress={() => setIsEditKey(false)}>
 			<View className="absolute inset-0 z-10 flex w-full items-center justify-center bg-black/50">
