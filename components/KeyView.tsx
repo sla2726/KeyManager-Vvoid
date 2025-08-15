@@ -15,7 +15,7 @@ type KeyViewProps = {
 
 export default function KeyView({
 	keys,
-	addKey,
+	setKeys,
 	setIsEditKey,
 	setKeyToEdit,
 	setIsInfoKey,
