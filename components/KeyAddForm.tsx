@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, TextInput, TouchableWithoutFeedback } from 'react-native';
-import { Eye, EyeClosed } from 'lucide-react-native';
+import { Eye, EyeClosed, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { Key } from './types/keys';
 
@@ -42,40 +42,63 @@ export default function KeyAddForm({ keys, setKeys, setIsAddKey }: KeyFormProps)
 		setIsPassDuplicate(false);
 	};
 
+	// Classes Tailwind
+	const defaultTextInput =
+		'w-full text-gray-500 rounded-md bg-gray-700 px-2 h-14';
+
 	return (
 		<TouchableWithoutFeedback onPress={() => setIsAddKey(false)}>
-			<View className="absolute inset-0 z-10 flex w-full items-center justify-center bg-black/50">
+			<View className="absolute inset-0 z-10 h-full w-full  bg-black/50">
 				<TouchableWithoutFeedback onPress={() => {}}>
-					<View className="flex w-3/4 flex-col items-center justify-center rounded-md border border-gray-500/60 bg-slate-900 px-4 py-2">
-						<Text className="self-start text-slate-100">Título</Text>
-						<TextInput
-							className="w-full rounded-md bg-gray-700 px-2"
-							onChangeText={setNewKeyName}
-							value={newKeyName}
-							placeholder="Senha do YouTube..."
-							placeholderTextColor="gray"
-						/>
-						<Text className="self-start text-slate-100">Local/Destino</Text>
-						<TextInput
-							className="w-full rounded-md bg-gray-700 px-2"
-							onChangeText={setNewKeyDist}
-							value={newKeyDist}
-							placeholder="Conta user123..."
-							placeholderTextColor="gray"
-						/>
-						<Text className="self-start text-slate-100">Senha</Text>
-						<TextInput
-							className="w-full rounded-md bg-gray-700 px-2"
-							onChangeText={(text) => {
-								setNewKeyPass(text);
-								const isDuplicate = keys.some((item) => item.key === text);
-								setIsPassDuplicate(isDuplicate);
-							}}
-							value={newKeyPass}
-							placeholder="juninh987grau123..."
-							placeholderTextColor="gray"
-							secureTextEntry={showPassword}
-						/>
+					<View className="h-full w-full rounded-md border border-gray-500/60 bg-slate-900 px-4 py-2">
+						<TouchableOpacity onPress={() => setIsAddKey(false)} className="absolute right-0 mt-2">
+							<X color="white" size={26} />
+						</TouchableOpacity>
+
+						<View className="mt-12 flex flex-col gap-2">
+							<Text className="text-gray-500 font-bold">Detalhes</Text>
+							<TextInput
+								style={{
+									borderWidth: 1,
+									borderColor: '#6B7280',
+									borderRadius: 6,
+								}}
+								className={defaultTextInput}
+								onChangeText={setNewKeyName}
+								value={newKeyName}
+								placeholder="Nome"
+								placeholderTextColor="gray"
+							/>
+							<TextInput
+								style={{
+									borderWidth: 1,
+									borderColor: '#6B7280',
+									borderRadius: 6,
+								}}
+								className={defaultTextInput}
+								onChangeText={setNewKeyDist}
+								value={newKeyDist}
+								placeholder="Destino"
+								placeholderTextColor="gray"
+							/>
+							<TextInput
+								style={{
+									borderWidth: 1,
+									borderColor: '#6B7280',
+									borderRadius: 6,
+								}}
+								className={defaultTextInput}
+								onChangeText={(text) => {
+									setNewKeyPass(text);
+									const isDuplicate = keys.some((item) => item.key === text);
+									setIsPassDuplicate(isDuplicate);
+								}}
+								value={newKeyPass}
+								placeholder="Senha"
+								placeholderTextColor="gray"
+								secureTextEntry={showPassword}
+							/>
+						</View>
 
 						<TouchableOpacity
 							className="mt-1 self-start rounded-md bg-gray-600/40 px-4"

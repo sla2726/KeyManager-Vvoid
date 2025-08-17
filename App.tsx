@@ -2,9 +2,16 @@ import './global.css';
 import * as Updates from 'expo-updates';
 import { useFonts } from 'expo-font';
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { AlignJustify, Plus, RefreshCw } from 'lucide-react-native';
 import * as Animatable from 'react-native-animatable';
+import { preventScreenCaptureAsync, allowScreenCaptureAsync } from 'expo-screen-capture';
 import { Key } from './components/types/keys';
 import KeyAddForm from './components/KeyAddForm';
 import KeyEditForm from './components/KeyEditForm';
@@ -65,6 +72,11 @@ export default function App() {
     }
   };
 
+  const [isAppVisible, setIsAppVisible] = useState(false);
+
+  useEffect(() => {
+    preventScreenCaptureAsync();
+  }, [])
   if (!fontsLoaded) return null;
 
   return (
@@ -90,12 +102,13 @@ export default function App() {
         }}
       />
 
-      <View className="absolute bottom-0 z-10 flex h-10 w-full flex-row items-center justify-center bg-slate-800 ">
-        <View className="absolute rounded-full bg-gray-600 px-2">
-          <TouchableOpacity onPress={() => setIsAddKey((prev) => !prev)}>
-            <Plus />
-          </TouchableOpacity>
-        </View>
+      <View className="absolute bottom-0 z-10 flex h-16 w-full flex-row items-center justify-center bg-slate-800 ">
+        <TouchableOpacity
+          className="absolute w-24 items-center rounded-full bg-gray-600 px-2"
+          onPress={() => setIsAddKey(true)}>
+          <Plus size={28} />
+        </TouchableOpacity>
+
         <View className="ml-auto rounded-full bg-gray-600 px-2">
           <TouchableOpacity onPress={reloadApp}>
             <RefreshCw />
