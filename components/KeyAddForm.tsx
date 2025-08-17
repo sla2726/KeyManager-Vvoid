@@ -43,20 +43,18 @@ export default function KeyAddForm({ keys, setKeys, setIsAddKey }: KeyFormProps)
 	};
 
 	// Classes Tailwind
-	const defaultTextInput =
-		'w-full text-gray-500 rounded-md bg-gray-700 px-2 h-14';
+	const defaultTextInput = 'w-full text-gray-500 rounded-md bg-gray-700 px-2 h-14';
 
 	return (
 		<TouchableWithoutFeedback onPress={() => setIsAddKey(false)}>
 			<View className="absolute inset-0 z-10 h-full w-full  bg-black/50">
 				<TouchableWithoutFeedback onPress={() => {}}>
 					<View className="h-full w-full rounded-md border border-gray-500/60 bg-slate-900 px-4 py-2">
-						<TouchableOpacity onPress={() => setIsAddKey(false)} className="absolute right-0 mt-2">
+						<TouchableOpacity onPress={() => setIsAddKey(false)} className="absolute right-2 z-20 mt-2">
 							<X color="white" size={26} />
 						</TouchableOpacity>
 
 						<View className="mt-12 flex flex-col gap-2">
-							<Text className="text-gray-500 font-bold">Detalhes</Text>
 							<TextInput
 								style={{
 									borderWidth: 1,

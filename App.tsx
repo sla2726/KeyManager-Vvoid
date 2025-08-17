@@ -9,13 +9,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { AlignJustify, Plus, RefreshCw } from 'lucide-react-native';
+import { AlignJustify, Plus, RefreshCw, X } from 'lucide-react-native';
 import * as Animatable from 'react-native-animatable';
 import { preventScreenCaptureAsync, allowScreenCaptureAsync } from 'expo-screen-capture';
 import { Key } from './components/types/keys';
 import KeyAddForm from './components/KeyAddForm';
 import KeyEditForm from './components/KeyEditForm';
 import KeyView from './components/KeyView';
+import MenuItems from './components/Menu';
 import { saveData, loadData } from './components/utils/saveStorage';
 
 export default function App() {
@@ -23,14 +24,13 @@ export default function App() {
     Oswald: require('./assets/fonts/Oswald.ttf'),
   });
 
-  // Senhas
   const [keys, setKeys] = useState<Key[]>([]);
-
+  
   const [isAddKey, setIsAddKey] = useState<boolean>(false);
   const [isEditKey, setIsEditKey] = useState<boolean>(false);
 
   const [keyToEdit, setKeyToEdit] = useState<Key | null>(null);
-
+  
   const [isInfoKey, setIsInfoKey] = useState<boolean>(false);
   const [infoKey, setInfoKey] = useState<Key | null>(null);
 
@@ -72,8 +72,7 @@ export default function App() {
     }
   };
 
-  const [isAppVisible, setIsAppVisible] = useState(false);
-
+  // Bloqueamento de prints e exibição em abas
   useEffect(() => {
     preventScreenCaptureAsync();
   }, [])
@@ -149,7 +148,7 @@ export default function App() {
                 duration={400}
                 className="z-20 h-full w-2/4 bg-black">
                 <View>
-                  <Text className="text-slate-100">jksksksk</Text>
+                  <MenuItems />
                 </View>
               </Animatable.View>
             </TouchableWithoutFeedback>
@@ -159,20 +158,24 @@ export default function App() {
 
       {isInfoKey && infoKey && (
         <TouchableWithoutFeedback onPress={() => setIsInfoKey(false)}>
-          <View className="absolute inset-0 z-10 flex w-full items-center justify-center bg-black/50">
+          <View className="absolute inset-0 z-10 w-full bg-black/50">
             <TouchableWithoutFeedback onPress={() => {}}>
-              <View className="flex w-3/4 flex-col rounded-md border border-gray-500/60 bg-slate-900 px-4 py-6">
+              <View className="w-full h-full rounded-md border border-gray-500/60 bg-slate-900 px-4 py-6">
+                <TouchableOpacity onPress={() => setIsInfoKey(false)} className="absolute right-2 z-20 mt-2">
+							<X color="white" size={26} />
+						</TouchableOpacity>
+
                 {Object.entries({
                   Nome: infoKey.name,
                   Senha: infoKey.key,
                   Destino: infoKey.dist,
                   Data: new Date(infoKey.date).toLocaleDateString('pt-BR'),
                 }).map(([label, value]) => (
-                  <View key={label}>
+                  <View className="flex flex-col" key={label}>
                     <Text className="text-slate-100">{label}</Text>
-                    <Text className="w-full rounded-md bg-gray-600 px-4 py-2 text-slate-300">
-                      {value}
-                    </Text>
+                    <View className="w-full rounded-md bg-gray-600 py-2 h-14">
+                      <Text className="ml-4 text-slate-300 ">{value}</Text>
+                    </View>
                   </View>
                 ))}
               </View>
