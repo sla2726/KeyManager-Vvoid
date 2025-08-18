@@ -2,22 +2,18 @@ import './global.css';
 import * as Updates from 'expo-updates';
 import { useFonts } from 'expo-font';
 import { useState, useEffect, useRef } from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import { AlignJustify, Plus, RefreshCw, X } from 'lucide-react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { preventScreenCaptureAsync, allowScreenCaptureAsync } from 'expo-screen-capture';
+import { preventScreenCaptureAsync } from 'expo-screen-capture';
+import { AlignJustify, Plus, RefreshCw, X } from 'lucide-react-native';
+import { saveData, loadData } from './components/utils/saveStorage';
 import { Key } from './components/types/keys';
 import KeyAddForm from './components/KeyAddForm';
 import KeyEditForm from './components/KeyEditForm';
 import KeyView from './components/KeyView';
 import MenuItems from './components/Menu';
-import { saveData, loadData } from './components/utils/saveStorage';
+import GeneratorScreen from './screens/menu-items/GeneratorScreen';
+import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,16 +21,18 @@ export default function App() {
   });
 
   const [keys, setKeys] = useState<Key[]>([]);
-  
+
   const [isAddKey, setIsAddKey] = useState<boolean>(false);
   const [isEditKey, setIsEditKey] = useState<boolean>(false);
 
   const [keyToEdit, setKeyToEdit] = useState<Key | null>(null);
-  
+
   const [isInfoKey, setIsInfoKey] = useState<boolean>(false);
   const [infoKey, setInfoKey] = useState<Key | null>(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const [menuItemOnScreen, setMenuItemOnScreen] = useState<boolean>(false);
 
   // Animação de saída do Menu
   const animationRef = useRef(null);
@@ -56,14 +54,6 @@ export default function App() {
     saveData(keys);
   }, [keys]);
 
-  function addKey(newKeyData: Key) {
-    const newKey: Key = {
-      ...newKeyData,
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
-    };
-    setKeys((prev) => [...prev, newKey]);
-  }
-
   const reloadApp = async () => {
     try {
       await Updates.reloadAsync();
@@ -75,7 +65,7 @@ export default function App() {
   // Bloqueamento de prints e exibição em abas
   useEffect(() => {
     preventScreenCaptureAsync();
-  }, [])
+  }, []);
   if (!fontsLoaded) return null;
 
   return (
@@ -146,9 +136,9 @@ export default function App() {
                 ref={animationRef}
                 animation="slideInLeft"
                 duration={400}
-                className="z-20 h-full w-2/4 bg-black">
+                className="z-20 h-full w-2/4 bg-slate-900">
                 <View>
-                  <MenuItems />
+                  <MenuItems setOnScreen={setMenuItemOnScreen} />
                 </View>
               </Animatable.View>
             </TouchableWithoutFeedback>
@@ -156,28 +146,38 @@ export default function App() {
         </TouchableWithoutFeedback>
       )}
 
+      {menuItemOnScreen && (
+        <View className="absolute inset-0 h-full w-full">
+          {RenderChecker(menuItemOnScreen, <GeneratorScreen />)}
+        </View>
+      )}
+
       {isInfoKey && infoKey && (
         <TouchableWithoutFeedback onPress={() => setIsInfoKey(false)}>
           <View className="absolute inset-0 z-10 w-full bg-black/50">
             <TouchableWithoutFeedback onPress={() => {}}>
-              <View className="w-full h-full rounded-md border border-gray-500/60 bg-slate-900 px-4 py-6">
-                <TouchableOpacity onPress={() => setIsInfoKey(false)} className="absolute right-2 z-20 mt-2">
-							<X color="white" size={26} />
-						</TouchableOpacity>
+              <View className="h-full w-full rounded-md border border-gray-500/60 bg-slate-900 px-4 py-6">
+                <TouchableOpacity
+                  onPress={() => setIsInfoKey(false)}
+                  className="absolute right-2 z-20 mt-2">
+                  <X color="white" size={26} />
+                </TouchableOpacity>
 
-                {Object.entries({
-                  Nome: infoKey.name,
-                  Senha: infoKey.key,
-                  Destino: infoKey.dist,
-                  Data: new Date(infoKey.date).toLocaleDateString('pt-BR'),
-                }).map(([label, value]) => (
-                  <View className="flex flex-col" key={label}>
-                    <Text className="text-slate-100">{label}</Text>
-                    <View className="w-full rounded-md bg-gray-600 py-2 h-14">
-                      <Text className="ml-4 text-slate-300 ">{value}</Text>
+                <View className="mt-6">
+                  {Object.entries({
+                    Nome: infoKey.name,
+                    Senha: infoKey.key,
+                    Destino: infoKey.dist,
+                    Data: new Date(infoKey.date).toLocaleDateString('pt-BR'),
+                  }).map(([label, value]) => (
+                    <View className="flex flex-col" key={label}>
+                      <Text className="text-slate-100">{label}</Text>
+                      <View className="h-14 w-full rounded-md bg-gray-600 py-2">
+                        <Text className="ml-4 text-slate-300 ">{value}</Text>
+                      </View>
                     </View>
-                  </View>
-                ))}
+                  ))}
+                </View>
               </View>
             </TouchableWithoutFeedback>
           </View>
