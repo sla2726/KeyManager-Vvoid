@@ -1,12 +1,13 @@
 import './global.css';
 import * as Updates from 'expo-updates';
 import { useFonts } from 'expo-font';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { preventScreenCaptureAsync } from 'expo-screen-capture';
-import { AlignJustify, Plus, RefreshCw, X } from 'lucide-react-native';
+import { AlignJustify, Plus, RefreshCw, X, Home } from 'lucide-react-native';
 import { saveData, loadData } from './components/utils/saveStorage';
+import { FONTS } from './components/data/fonts';
 import { Key } from './components/types/keys';
 import KeyAddForm from './components/KeyAddForm';
 import KeyEditForm from './components/KeyEditForm';
@@ -16,8 +17,13 @@ import GeneratorScreen from './screens/menu-items/GeneratorScreen';
 import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    Oswald: require('./assets/fonts/Oswald.ttf'),
+  const [fontsLoaded, fontError] = useFonts({
+    Oswald: FONTS.Oswald.Regular,
+    'Oswald-SemiBold': FONTS.Oswald.SemiBold,
+    'Oswald-Bold': FONTS.Oswald.Bold,
+    Mozilla: FONTS.Mozilla.Regular,
+    'Mozilla-SemiBold': FONTS.Mozilla.SemiBold,
+    'Mozilla-Bold': FONTS.Mozilla.Bold,
   });
 
   const [keys, setKeys] = useState<Key[]>([]);
@@ -32,7 +38,7 @@ export default function App() {
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  const [menuItemOnScreen, setMenuItemOnScreen] = useState<boolean>(false);
+  const [menuItemOnScreen, setMenuItemOnScreen] = useState<string | null>(null);
 
   // Animação de saída do Menu
   const animationRef = useRef(null);
@@ -66,7 +72,13 @@ export default function App() {
   useEffect(() => {
     preventScreenCaptureAsync();
   }, []);
-  if (!fontsLoaded) return null;
+
+  // Telas do Menu
+  const screenMap: { [key: string]: ReactNode } = {
+    generate: <GeneratorScreen setOnScreen={setMenuItemOnScreen} />,
+  };
+
+  if (!fontsLoaded && !fontError) return null;
 
   return (
     <View className="h-full w-full flex-1 bg-slate-900">
@@ -77,19 +89,34 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
-        <Text className="font-bold text-white">Key Manager</Text>
+        <Text style={{ fontFamily: 'Mozilla-Bold' }} className="text-slate-100">
+          Key Manager
+        </Text>
       </SafeAreaView>
 
-      <KeyView
-        {...{
-          keys,
-          setKeys,
-          setIsEditKey,
-          setKeyToEdit,
-          setIsInfoKey,
-          setInfoKey,
-        }}
-      />
+      {menuItemOnScreen ? (
+        screenMap[menuItemOnScreen] || (
+          <View className="z-20 flex h-full w-full flex-col items-center justify-center bg-slate-900">
+            <Text className="text-4xl text-slate-100">Página não encontrada...</Text>
+            <TouchableOpacity
+              className="absolute right-2 top-2"
+              onPress={() => setMenuItemOnScreen(null)}>
+              <Home size={46} color="white" />
+            </TouchableOpacity>
+          </View>
+        )
+      ) : (
+        <KeyView
+          {...{
+            keys,
+            setKeys,
+            setIsEditKey,
+            setKeyToEdit,
+            setIsInfoKey,
+            setInfoKey,
+          }}
+        />
+      )}
 
       <View className="absolute bottom-0 z-10 flex h-16 w-full flex-row items-center justify-center bg-slate-800 ">
         <TouchableOpacity
@@ -130,26 +157,18 @@ export default function App() {
 
       {isMenuOpen && (
         <TouchableWithoutFeedback onPress={() => closeMenu()}>
-          <View className="absolute inset-0 z-10 bg-black/50">
+          <View className="absolute inset-0 z-30 bg-black/50">
             <TouchableWithoutFeedback onPress={() => {}}>
               <Animatable.View
                 ref={animationRef}
                 animation="slideInLeft"
                 duration={400}
                 className="z-20 h-full w-2/4 bg-slate-900">
-                <View>
-                  <MenuItems setOnScreen={setMenuItemOnScreen} />
-                </View>
+                <MenuItems setOnScreen={setMenuItemOnScreen} />
               </Animatable.View>
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
-      )}
-
-      {menuItemOnScreen && (
-        <View className="absolute inset-0 h-full w-full">
-          {RenderChecker(menuItemOnScreen, <GeneratorScreen />)}
-        </View>
       )}
 
       {isInfoKey && infoKey && (
