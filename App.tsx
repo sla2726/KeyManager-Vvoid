@@ -14,18 +14,19 @@ import KeyEditForm from './components/KeyEditForm';
 import KeyView from './components/KeyView';
 import MenuItems from './components/Menu';
 import GeneratorScreen from './screens/menu-items/GeneratorScreen';
-import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
+// import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
-    Oswald: FONTS.Oswald.Regular,
-    'Oswald-SemiBold': FONTS.Oswald.SemiBold,
-    'Oswald-Bold': FONTS.Oswald.Bold,
-    Mozilla: FONTS.Mozilla.Regular,
-    'Mozilla-SemiBold': FONTS.Mozilla.SemiBold,
-    'Mozilla-Bold': FONTS.Mozilla.Bold,
-  });
+    "Oswald-Regular": FONTS.Oswald.Regular,
+    "Oswald-SemiBold": FONTS.Oswald.SemiBold,
+    "Oswald-Bold": FONTS.Oswald.Bold,
 
+    "Mozilla-Regular": FONTS.Mozilla.Regular,
+    "Mozilla-SemiBold": FONTS.Mozilla.SemiBold,
+    "Mozilla-Bold": FONTS.Mozilla.Bold,
+  });
+  
   const [keys, setKeys] = useState<Key[]>([]);
 
   const [isAddKey, setIsAddKey] = useState<boolean>(false);
@@ -78,6 +79,7 @@ export default function App() {
     generate: <GeneratorScreen setOnScreen={setMenuItemOnScreen} />,
   };
 
+  
   if (!fontsLoaded && !fontError) return null;
 
   return (

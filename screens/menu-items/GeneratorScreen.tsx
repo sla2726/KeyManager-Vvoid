@@ -3,9 +3,9 @@ import { X } from 'lucide-react-native';
 
 export default function GeneratorScreen({setOnScreen}: {setOnScreen: React.Dispatch<React.SetStateAction<string | null>>}) {
 	return (
-		<View className="">
+		<View>
 			<TouchableOpacity onPress={() => setOnScreen(null)}><X /></TouchableOpacity>
-			<Text>Hello world</Text>
+			<Text className="text-slate-100">Hello world</Text>
 		</View>
 	)
 }
