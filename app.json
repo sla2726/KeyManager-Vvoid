@@ -10,7 +10,7 @@
       "tsconfigPaths": true
     },
     "plugins": [
-      "expo-font",
+      "expo-font"
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,7 +21,8 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
-      "**/*"
+      "**/*",
+      "assets/fonts/**/*"
     ],
     "ios": {
       "supportsTablet": true
@@ -40,6 +41,12 @@
       "eas": {
         "projectId": "38176034-81c4-4b83-aaa0-aedd404ca5a1"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/38176034-81c4-4b83-aaa0-aedd404ca5a1"
     }
   }
 }

@@ -1,6 +1,6 @@
 import './global.css';
 import * as Updates from 'expo-updates';
-import { useFonts } from 'expo-font';
+import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { useState, useEffect, useRef, ReactNode } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import * as Animatable from 'react-native-animatable';
@@ -17,16 +17,16 @@ import GeneratorScreen from './screens/menu-items/GeneratorScreen';
 // import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
 
 export default function App() {
-  const [fontsLoaded, fontError] = useFonts({
-    "Oswald-Regular": FONTS.Oswald.Regular,
-    "Oswald-SemiBold": FONTS.Oswald.SemiBold,
-    "Oswald-Bold": FONTS.Oswald.Bold,
+   const [fontsLoaded, fontError] = useFonts({
+    Oswald_400Regular,
+  }); 
+  useEffect(() => {
+  if (fontError) {
+    console.error('Erro ao carregar fontes:', fontError);
+  }
+  console.log('Fontes carregadas:', fontsLoaded);
+}, [fontsLoaded, fontError]);
 
-    "Mozilla-Regular": FONTS.Mozilla.Regular,
-    "Mozilla-SemiBold": FONTS.Mozilla.SemiBold,
-    "Mozilla-Bold": FONTS.Mozilla.Bold,
-  });
-  
   const [keys, setKeys] = useState<Key[]>([]);
 
   const [isAddKey, setIsAddKey] = useState<boolean>(false);
@@ -79,8 +79,7 @@ export default function App() {
     generate: <GeneratorScreen setOnScreen={setMenuItemOnScreen} />,
   };
 
-  
-  if (!fontsLoaded && !fontError) return null;
+  if (!fontsLoaded) return null;
 
   return (
     <View className="h-full w-full flex-1 bg-slate-900">
@@ -91,7 +90,7 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
-        <Text style={{ fontFamily: 'Mozilla-Bold' }} className="text-slate-100">
+        <Text style={{ fontFamily: 'Oswald_400Regular'}}  className="text-slate-100">
           Key Manager
         </Text>
       </SafeAreaView>
