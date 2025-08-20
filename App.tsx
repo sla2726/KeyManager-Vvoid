@@ -17,15 +17,16 @@ import GeneratorScreen from './screens/menu-items/GeneratorScreen';
 // import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
 
 export default function App() {
-   const [fontsLoaded, fontError] = useFonts({
-    Oswald_400Regular,
-  }); 
+  const [fontsLoaded, fontError] = useFonts({
+    'Oswald_400Regular': Oswald_400Regular,
+    'Oswald_700Bold': Oswald_700Bold,
+  });
   useEffect(() => {
-  if (fontError) {
-    console.error('Erro ao carregar fontes:', fontError);
-  }
-  console.log('Fontes carregadas:', fontsLoaded);
-}, [fontsLoaded, fontError]);
+    if (fontError) {
+      console.error('Erro ao carregar fontes:', fontError);
+    }
+    console.log('Fontes carregadas:', fontsLoaded);
+  }, [fontsLoaded, fontError]);
 
   const [keys, setKeys] = useState<Key[]>([]);
 
@@ -90,7 +91,7 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
-        <Text style={{ fontFamily: 'Oswald_400Regular'}}  className="text-slate-100">
+        <Text style={{ fontFamily: fontsLoaded ? 'Oswald_400Regular' : 'System' }} className="text-slate-100">
           Key Manager
         </Text>
       </SafeAreaView>
