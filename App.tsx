@@ -77,7 +77,7 @@ export default function App() {
         </View>
 
         <Text className="text-slate-100 font-extrabold">
-          KEY MANAGER
+          {menuItemOnScreen === 'generate' && <Text>GERENCIADOR DE SENHAS</Text> }
         </Text>
       </SafeAreaView>
 
