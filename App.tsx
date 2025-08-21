@@ -67,6 +67,14 @@ export default function App() {
     generate: <GeneratorScreen setOnScreen={setMenuItemOnScreen} />,
   };
 
+  const getScreenTitle = (screenId: string | null): string => {
+    const screenTitle: { [key: string]: string } = {
+      generate: 'GERADOR DE SENHAS'
+    };
+    
+    return screenId && screenTitle[screenId] ? screenTitle[screenId]: 'GERENCIADOR DE SENHAS';
+  }
+
   return (
     <View className="h-full w-full flex-1 bg-slate-900">
       <SafeAreaView className="absolute relative top-0 flex h-16 w-full items-center justify-center bg-slate-800">
@@ -77,7 +85,7 @@ export default function App() {
         </View>
 
         <Text className="text-slate-100 font-extrabold">
-          {menuItemOnScreen === 'generate' && <Text>GERENCIADOR DE SENHAS</Text> }
+          {getScreenTitle(menuItemOnScreen)}
         </Text>
       </SafeAreaView>
 
