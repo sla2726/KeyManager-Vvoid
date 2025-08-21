@@ -1,13 +1,11 @@
 import './global.css';
 import * as Updates from 'expo-updates';
-import { useFonts, Oswald_400Regular, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { useState, useEffect, useRef, ReactNode } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { preventScreenCaptureAsync } from 'expo-screen-capture';
 import { AlignJustify, Plus, RefreshCw, X, Home } from 'lucide-react-native';
 import { saveData, loadData } from './components/utils/saveStorage';
-import { FONTS } from './components/data/fonts';
 import { Key } from './components/types/keys';
 import KeyAddForm from './components/KeyAddForm';
 import KeyEditForm from './components/KeyEditForm';
@@ -17,17 +15,6 @@ import GeneratorScreen from './screens/menu-items/GeneratorScreen';
 // import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
 
 export default function App() {
-  const [fontsLoaded, fontError] = useFonts({
-    'Oswald_400Regular': Oswald_400Regular,
-    'Oswald_700Bold': Oswald_700Bold,
-  });
-  useEffect(() => {
-    if (fontError) {
-      console.error('Erro ao carregar fontes:', fontError);
-    }
-    console.log('Fontes carregadas:', fontsLoaded);
-  }, [fontsLoaded, fontError]);
-
   const [keys, setKeys] = useState<Key[]>([]);
 
   const [isAddKey, setIsAddKey] = useState<boolean>(false);
@@ -80,8 +67,6 @@ export default function App() {
     generate: <GeneratorScreen setOnScreen={setMenuItemOnScreen} />,
   };
 
-  if (!fontsLoaded) return null;
-
   return (
     <View className="h-full w-full flex-1 bg-slate-900">
       <SafeAreaView className="absolute relative top-0 flex h-16 w-full items-center justify-center bg-slate-800">
@@ -91,8 +76,8 @@ export default function App() {
           </TouchableOpacity>
         </View>
 
-        <Text style={{ fontFamily: fontsLoaded ? 'Oswald_400Regular' : 'System' }} className="text-slate-100">
-          Key Manager
+        <Text className="text-slate-100 font-extrabold">
+          KEY MANAGER
         </Text>
       </SafeAreaView>
 

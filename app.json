@@ -21,11 +21,11 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
-      "**/*",
-      "assets/fonts/**/*"
+      "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.keymanager"
     },
     "android": {
       "adaptiveIcon": {
@@ -43,7 +43,7 @@
       }
     },
     "runtimeVersion": {
-      "policy": "appVersion"
+      "policy": "1.0.0"
     },
     "updates": {
       "url": "https://u.expo.dev/38176034-81c4-4b83-aaa0-aedd404ca5a1"
