@@ -3,6 +3,7 @@
     "name": "KeyManager",
     "slug": "key-manager",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
     "web": {
       "favicon": "./assets/favicon.png"
     },
@@ -41,9 +42,6 @@
       "eas": {
         "projectId": "38176034-81c4-4b83-aaa0-aedd404ca5a1"
       }
-    },
-    "runtimeVersion": {
-      "policy": "1.0.0"
     },
     "updates": {
       "url": "https://u.expo.dev/38176034-81c4-4b83-aaa0-aedd404ca5a1"
