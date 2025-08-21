@@ -13,7 +13,6 @@ export default function GeneratorScreen({ setOnScreen }: GeneratorScreenProps) {
 	return (
 		<View className="flex h-full w-full flex-col">
 			<View className="mt-2 items-center">
-				<Text className="text-slate-100 font-extrabold">GERADOR DE SENHAS</Text>
 				<TouchableOpacity className="absolute top-2 right-2" onPress={() => setOnScreen(null)}>
 					<Home color="white" size={42} />
 				</TouchableOpacity>
