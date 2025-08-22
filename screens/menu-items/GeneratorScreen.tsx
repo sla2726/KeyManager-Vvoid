@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Home } from 'lucide-react-native';
+import AnimatedSwitch from '../../components/AnimateSwitch'
 
 interface GeneratorScreenProps {
 	setOnScreen: React.Dispatch<React.SetStateAction<string | null>>;
@@ -9,6 +10,8 @@ interface GeneratorScreenProps {
 
 export default function GeneratorScreen({ setOnScreen }: GeneratorScreenProps) {
 	const [length, setLength] = useState<number>(12);
+
+	const [hasSymbols, setHasSymbols] = useState<boolean>(false)
 
 	return (
 		<View className="flex h-full w-full flex-col">
@@ -18,10 +21,13 @@ export default function GeneratorScreen({ setOnScreen }: GeneratorScreenProps) {
 				</TouchableOpacity>
 			</View>
 			<View style={{ marginTop: 80 }} className="w-full flex-col">
-				<View className="bg-slate-700">
-					<Text className="px-4 text-slate-100">Quantidades de caracteres: {length}</Text>
+				<View className="bg-gray-700 py-6">
+					<View className="px-4 flex-row gap-1">
+						<Text className="font-bold text-slate-100">Quantidades de caracteres:</Text>
+						<Text className="bg-gray-600 px-2 text-slate-100 font-bold">{length}</Text>
+					</View>
 					<Slider
-						style={{ width: '100%', height: 40 }}
+						style={{ width: '100%', height: 30 }}
 						minimumValue={4}
 						maximumValue={32}
 						step={1}
@@ -33,6 +39,10 @@ export default function GeneratorScreen({ setOnScreen }: GeneratorScreenProps) {
 						accessibilityLabel={`Quantidade de caracteres: ${length}`}
 					/>
 				</View>
+			</View>
+
+			<View className="bg-gray-700">
+				<AnimatedSwitch value={hasSymbols} onValueChange={setHasSymbols} label="Teste" />
 			</View>
 		</View>
 	);
