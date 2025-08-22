@@ -44,6 +44,6 @@ replit.nix
 package-lock.json 
 cesconfig.jsonc
 prettier.config.js
+gitc.sh
 android/
 ios/
-gitc.sh
