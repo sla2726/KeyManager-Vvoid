@@ -56,7 +56,6 @@ export default function AnimatedSwitch({ value, onValueChange, label }: SwitchPr
         </Animatable.View>
       </Pressable>
 
-      {label && <Text className="text-slate-100">{label}</Text>}
     </View>
   );
 } 

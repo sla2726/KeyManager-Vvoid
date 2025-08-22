@@ -1,4 +1,4 @@
-export function generatePassword(length: number, options: { upper?: boolean, lower?: boolean, numbers?: boolean, symbols?: boolean }): string {
+export default function generatePassword(length: number, options: { upper?: boolean, lower?: boolean, numbers?: boolean, symbols?: boolean }): string {
 	const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const lower = "abcdefghijklmnopqrstuvwxyz";
 	const numbers = "0123456789";

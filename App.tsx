@@ -12,7 +12,6 @@ import KeyEditForm from './components/KeyEditForm';
 import KeyView from './components/KeyView';
 import MenuItems from './components/Menu';
 import GeneratorScreen from './screens/menu-items/GeneratorScreen';
-// import { RenderChecker, ArrayRenderChecker } from './components/helpers/VariableChecker';
 
 export default function App() {
   const [keys, setKeys] = useState<Key[]>([]);
