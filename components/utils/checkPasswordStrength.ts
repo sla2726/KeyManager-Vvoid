@@ -1,6 +1,6 @@
 interface PasswordStrength {
   score: number;
-  level: 'Muito Fraca' | 'Fraca' | 'Média' | 'Forte' | 'Muito Forte';
+  level: 'Muito Fraco' | 'Fraco' | 'Médio' | 'Forte' | 'Muito Forte';
   color: string;
   feedback: string[];
 }
@@ -71,13 +71,13 @@ export default function checkPasswordSecurity(password: string): PasswordStrengt
     level = 'Forte';
     color = '#84cc16';
   } else if (score >= 40) {
-    level = 'Média';
+    level = 'Médio';
     color = '#f59e0b';
   } else if (score >= 20) {
-    level = 'Fraca';
+    level = 'Fraco';
     color = '#f97316';
   } else {
-    level = 'Muito Fraca';
+    level = 'Muito Fraco';
     color = '#ef4444';
   }
 
