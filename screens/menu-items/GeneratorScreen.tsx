@@ -5,6 +5,7 @@ import * as Clipboard from 'expo-clipboard';
 import { Home, Copy } from 'lucide-react-native';
 import AnimatedSwitch from '../../components/AnimateSwitch';
 import generatePassword from '../../components/utils/generatePassword';
+import checkPasswordStrength from '../../components/utils/checkPasswordStrength';
 
 interface GeneratorScreenProps {
 	setOnScreen: React.Dispatch<React.SetStateAction<string | null>>;
@@ -30,6 +31,8 @@ export default function GeneratorScreen({ setOnScreen }: GeneratorScreenProps) {
 		await Clipboard.setStringAsync(createdPassword);
 	};
 
+	const passwordStrength = checkPasswordStrength(createdPassword);
+
 	return (
 		<ScrollView
 			className="flex h-full w-full"
@@ -37,17 +40,55 @@ export default function GeneratorScreen({ setOnScreen }: GeneratorScreenProps) {
 			<TouchableOpacity className="absolute right-2 top-2" onPress={() => setOnScreen(null)}>
 				<Home color="white" size={42} />
 			</TouchableOpacity>
+
 			<View style={{ marginTop: 80, width: '95%' }} className="w-full flex-col gap-6">
-				<View style={{ borderRadius: 8 }} className="flex-row bg-gray-700 px-4 py-6">
-					<Text className="text-lg font-bold text-slate-300">{createdPassword}</Text>
-					<TouchableOpacity className="ml-auto" onPress={() => copyToClipboard()}>
-						<Copy color="white" />
-					</TouchableOpacity>
+				<View>
+					<View style={{ borderRadius: 8 }} className="flex-row bg-gray-700 px-4 py-6 ">
+						<Text className="text-lg font-bold text-slate-300">{createdPassword}</Text>
+						<TouchableOpacity className="ml-auto" onPress={() => copyToClipboard()}>
+							<Copy color="white" />
+						</TouchableOpacity>
+					</View>
+					<View style={{ borderRadius: 8 }} className="mt-1 bg-gray-700 px-4 py-2">
+						<View className="flex-row gap-1">
+							<Text className="font-extrabold text-slate-300">Nível de Segurança:</Text>
+							<Text className="bg-gray-600 px-2 font-bold text-slate-100">
+								{passwordStrength.level}
+							</Text>
+						</View>
+						<View className="bg-gray-600 mt-1">
+							<View
+								style={{
+									height: 8,
+									width: `${passwordStrength.score}%`,
+									backgroundColor: passwordStrength.color,
+								}}
+								className="rounded-full"
+							/>
+						</View>
+
+						{passwordStrength.feedback.length > 0 && (
+							<>
+								<Text className="font-extrabold text-slate-300 mt-2">Sugestões:</Text>
+
+								<View className="bg-gray-600/40 px-2">
+									{passwordStrength.feedback.map((tip, index) => (
+										<Text
+											key={index}
+											style={{ color: '#e2e8f0', fontSize: 12 }}
+											className="font-medium">
+											• {tip}
+										</Text>
+									))}
+								</View>
+							</>
+						)}
+					</View>
 				</View>
 
 				<View style={{ borderRadius: 8 }} className="bg-gray-700 py-6">
 					<View className="flex-row gap-1 px-4">
-						<Text className="font-bold text-slate-300 text-lg">Quantidades de caracteres:</Text>
+						<Text className="text-lg font-bold text-slate-300">Quantidades de caracteres:</Text>
 						<Text className="bg-gray-600 px-2 font-bold text-slate-100">{tempLength}</Text>
 					</View>
 					<Slider
@@ -84,7 +125,6 @@ export default function GeneratorScreen({ setOnScreen }: GeneratorScreenProps) {
 						<AnimatedSwitch value={hasSymbols} onValueChange={setHasSymbols} label="Símbolos?" />
 					</View>
 				</View>
-				
 			</View>
 		</ScrollView>
 	);
