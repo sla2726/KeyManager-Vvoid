@@ -5,10 +5,11 @@ import * as Animatable from 'react-native-animatable';
 interface SwitchProps {
   value: boolean;
   onValueChange: (value: boolean) => void;
-  label?: string;
+  label: string;
+  disabled?: boolean;
 }
 
-export default function AnimatedSwitch({ value, onValueChange, label }: SwitchProps) {
+export default function AnimatedSwitch({ value, onValueChange, label, disabled }: SwitchProps) {
   const trackRef = useRef<any>(null);
   const thumbRef = useRef<any>(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -20,7 +21,7 @@ export default function AnimatedSwitch({ value, onValueChange, label }: SwitchPr
 
     // Background animation
     trackRef.current?.transitionTo(
-      { backgroundColor: !value ? '#22c55e' : '#d1d5db' },
+      { backgroundColor: !value ? '#4a5565' : '#d1d5dc' },
       200
     );
 
@@ -38,12 +39,12 @@ export default function AnimatedSwitch({ value, onValueChange, label }: SwitchPr
 
   return (
     <View className="flex-row items-center gap-3">
-      <Pressable onPress={handlePress}>
+      <Pressable disabled={disabled} onPress={handlePress}>
         <Animatable.View 
           ref={trackRef}
           className="w-14 h-7 rounded-full p-1 justify-center shadow-sm"
           style={{
-            backgroundColor: value ? '#22c55e' : '#d1d5db',
+            backgroundColor: value ? '#4a5565' : '#d1d5dc',
           }}
         >
           <Animatable.View 
@@ -55,6 +56,7 @@ export default function AnimatedSwitch({ value, onValueChange, label }: SwitchPr
           />
         </Animatable.View>
       </Pressable>
+      <Text className="text-slate-300 font-bold">{label}</Text>
 
     </View>
   );

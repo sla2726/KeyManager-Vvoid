@@ -57,9 +57,9 @@ export default function App() {
   };
 
   // Bloqueamento de prints e exibição em abas
-  useEffect(() => {
+  /* useEffect(() => {
     preventScreenCaptureAsync();
-  }, []);
+  }, []); */
 
   // Telas do Menu
   const screenMap: { [key: string]: ReactNode } = {
